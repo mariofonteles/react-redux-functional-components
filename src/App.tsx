@@ -6,7 +6,6 @@ import HomePage from './pages/homePage';
 
 function App() {
   return (
-    <Router>
       <div className="App">
         {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
@@ -24,8 +23,6 @@ function App() {
         </header> */}
         <Route path="/" exact component={HomePage} />
       </div>
-    </Router>
-
   );
 }
 

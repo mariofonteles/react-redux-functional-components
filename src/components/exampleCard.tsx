@@ -7,7 +7,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { CardHeader } from '@material-ui/core';
+import { CardHeader, TextField } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { DogActionTypes, RandomDogAction } from '../actions/dogActions';
 
 const useStyles = makeStyles({
   root: {
@@ -19,10 +21,15 @@ const useStyles = makeStyles({
   content: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '5vh'
+    marginTop: '2vh'
   },
   button: {
-    height: '7vh'
+    marginTop: '10px',
+    height: '7vh',
+    width: '90%'
+  },
+  input: {
+    width: '90%'
   },
   bullet: {
     display: 'inline-block',
@@ -40,17 +47,18 @@ const useStyles = makeStyles({
 export default function SimpleCard() {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
-
-  const header = <Typography variant="h5" component="h2">
-  Click to get a goat
-</Typography>
+  const header = <Typography variant="h5" component="h2">Find Doggo</Typography>;
+  const dispatch = useDispatch();
 
   return (
     <Card className={classes.root}>
       <CardHeader title={header}>
       </CardHeader>
       <CardContent className={classes.content}>
-        <Button className={classes.button} variant="contained" size="large" color="primary"> get random goat</Button>
+        <TextField className={classes.input} label="Type a dog breed..." variant="outlined"></TextField>
+        <Button onClick={() => { debugger; dispatch(RandomDogAction())}} className={classes.button} variant="contained" size="large" color="primary"> 
+          get random dog
+        </Button>
       </CardContent>
     </Card>
   );

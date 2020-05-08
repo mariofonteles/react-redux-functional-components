@@ -8,6 +8,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { CardHeader, CardMedia } from '@material-ui/core';
+import { useSelector, shallowEqual } from 'react-redux';
+import { IDogState } from '../reducers/basicReducer';
 
 const useStyles = makeStyles({
   root: {
@@ -37,24 +39,25 @@ const useStyles = makeStyles({
   },
 });
 
-export default function GoatCard() {
+export default function DogCard() {
   const classes = useStyles();
 
   const header = <Typography variant="h5" component="h2">
   Click to get a dog
 </Typography>
 
-    const [dog, setDog] = useState('');
+    const dogTest = useSelector((state: any) => state.dogState.image);
+    console.log(dogTest);
 
-    useEffect( () => {
-        fetch('https://dog.ceo/api/breed/pug/images/random').then( async (response: any) => {
-        let result = await response.json()
-        return setDog(result.message);
-    })}, []);
+    // useEffect( () => {
+    //     fetch('https://dog.ceo/api/breed/pug/images/random').then( async (response: any) => {
+    //     let result = await response.json()
+    //     return setDog(result.message);
+    // })}, []);
 
   return (
     <Card className={classes.root}>
-        <img src={dog}/>
+        <img src={dogTest}/>
     </Card>
   );
 }

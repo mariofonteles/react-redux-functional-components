@@ -1,23 +1,24 @@
 import { Reducer } from 'redux';
-import { BasicActionTypes, BasicActions } from '../actions/basicActions';
+import { DogActionTypes, DogActions } from '../actions/dogActions';
 
-export interface IBasicState {
-    property: any;
+export interface IDogState {
+    image: string;
 }
 
-const initialBasicState: IBasicState = {
-    property: null
+const initialBasicState: IDogState = {
+    image: '',
 };
 
-export const basicReducer: Reducer<IBasicState, BasicActions> = (
+export const basicReducer: Reducer<IDogState, DogActions> = (
     state = initialBasicState,
     action
   ) => {
+    debugger;
     switch (action.type) {
-      case BasicActionTypes.ANY: {
+      case DogActionTypes.RANDOM_DOG: {
         return {
           ...state,
-          property: action.property
+          image: action.image
         };
       }
       default:
