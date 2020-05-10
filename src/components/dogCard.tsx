@@ -7,57 +7,50 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { CardHeader, CardMedia } from '@material-ui/core';
-import { useSelector, shallowEqual } from 'react-redux';
-import { IDogState } from '../reducers/basicReducer';
+import { CardHeader, CardMedia, LinearProgress, CircularProgress } from '@material-ui/core';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import { IAppState } from '../store/store';
+import { loadDogAction } from '../actions/dogActions';
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 275,
-    minHeight: 275,
-    alignSelf: 'middle',
-    justifySelf: 'end'
+    minWidth: 500,
+    minHeight: 500,
   },
-  content: {
+  cardContent: {
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '5vh'
+    marginTop: '40%'
   },
-  button: {
-    height: '7vh'
+  image: {
+    height: 0,
+    paddingTop: '0%'
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
+  img: {
+    width: 500,
+    height: 500
+  }
 });
 
 export default function DogCard() {
   const classes = useStyles();
+  const dogTest = useSelector((state: IAppState) => state.dogState.image);
+  const loading = useSelector((state: IAppState) => state.dogState.loading);
+  const dispatch = useDispatch();
 
-  const header = <Typography variant="h5" component="h2">
-  Click to get a dog
-</Typography>
-
-    const dogTest = useSelector((state: any) => state.dogState.image);
-    console.log(dogTest);
-
-    // useEffect( () => {
-    //     fetch('https://dog.ceo/api/breed/pug/images/random').then( async (response: any) => {
-    //     let result = await response.json()
-    //     return setDog(result.message);
-    // })}, []);
+  const cardImage = (src: string) => 
+    <CardMedia className={classes.image}>
+      <img className={classes.img} onLoad={() => dispatch(loadDogAction(false))} src={src}></img>
+    </CardMedia>
 
   return (
     <Card className={classes.root}>
-        <img src={dogTest}/>
+        {dogTest? cardImage(dogTest) : ''}
+        <CardContent className={classes.cardContent}>
+        {!loading && !dogTest? <p>test</p> : ''}
+        {loading? <CircularProgress size="80px" color="primary"></CircularProgress> : ''}
+        </CardContent>
     </Card>
   );
 }
