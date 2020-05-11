@@ -1,10 +1,11 @@
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { IDogState } from '../reducers/basicReducer';
+import { IDogState } from '../reducers/dogReducer';
 
 export enum DogActionTypes {
     RANDOM_DOG = 'RANDOM_DOG',
-    LOAD_DOG = 'LOAD_DOG'
+    LOAD_DOG = 'LOAD_DOG',
+    ERROR = 'ERROR'
 }
 
 export interface IRandomDogAction {
@@ -16,22 +17,26 @@ export interface ILoadDogAction {
     type: DogActionTypes.LOAD_DOG;
     loading: boolean;
 }
-export type DogActions = IRandomDogAction | ILoadDogAction;
+
+export interface IErrorAction {
+    type: DogActionTypes.ERROR;
+    errorMessage: string;
+}
+export type DogActions = IRandomDogAction | ILoadDogAction | IErrorAction;
 
 /*<Promise<Return Type>, State Interface, Type of Param, Type of Action> */
 export const RandomDogAction: ActionCreator<ThunkAction<Promise<any>, IDogState, null, IRandomDogAction>> = (dogBreed: string) => {
     return async (dispatch: Dispatch) => {
         try {
-            // loadDogAction(true);
-            console.log('entrou');
-            debugger;
-            let dog = await (await fetch(`https://dog.ceo/api/breed/${dogBreed}/images/random`)).json()
-            dispatch({image: dog.message, type: DogActionTypes.RANDOM_DOG });
-            // dispatch({loading: false, type: DogActionTypes.LOAD_DOG});
-            // loadDogAction(false);
+            let result = await (await fetch(`https://dog.ceo/api/breed/${dogBreed}/images/random`)).json();
+            if (result.status !== 'success')
+                throw new Error(result.message);
+            dispatch({image: result.message, type: DogActionTypes.RANDOM_DOG });
         } catch (err) {
         console.error(err);
-        }
+        dispatch({type: DogActionTypes.ERROR, errorMessage: err.message});
+        dispatch({type: DogActionTypes.LOAD_DOG, loading: false});
+        };
     };
 };
 

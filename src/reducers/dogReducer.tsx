@@ -4,15 +4,17 @@ import { DogActionTypes, DogActions } from '../actions/dogActions';
 export interface IDogState {
     image: string;
     loading: boolean;
+    errorMessage: string;
 }
 
-const initialBasicState: IDogState = {
+const initialDogState: IDogState = {
     image: '',
-    loading: false
+    loading: false,
+    errorMessage: ''
 };
 
-export const basicReducer: Reducer<IDogState, DogActions> = (
-    state = initialBasicState,
+export const dogReducer: Reducer<IDogState, DogActions> = (
+    state = initialDogState,
     action
   ) => {
     switch (action.type) {
@@ -27,6 +29,13 @@ export const basicReducer: Reducer<IDogState, DogActions> = (
           ...state,
           loading: action.loading
         };
+      }
+      case DogActionTypes.ERROR: {
+        return {
+          ...state,
+          errorMessage: action.errorMessage,
+          image: ''
+        }
       }
       default:
         return state;

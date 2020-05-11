@@ -1,15 +1,13 @@
-//This is an example component so you can get things going and take a look at some of Material-UIs features.
-//You should probably delete or modify this to start your project! 
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { CardHeader, TextField } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { DogActionTypes, RandomDogAction, loadDogAction } from '../actions/dogActions';
+import { CardHeader, TextField, CircularProgress } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { RandomDogAction, loadDogAction } from '../actions/dogActions';
+import { IAppState } from '../store/store';
 
 const useStyles = makeStyles({
   root: {
@@ -45,22 +43,33 @@ const useStyles = makeStyles({
 });
 
 export default function SimpleCard() {
-  const classes = useStyles();
-  const header = <Typography variant="h5" component="h2">Find Doggo</Typography>;
+   //this object represents the classes that we defined 
+   const classes = useStyles();
+  //this hook allows us to access the dispatch function
   const dispatch = useDispatch();
+  //the useState() hook allows our component to hold its own internal state
+  //the dogName property isn't going to be used anywhere else, so there's no need to hold it on the redux store
   const [dogName, setDogName] = useState('');
+  //here we watch for the loading prop in the redux store. every time it gets updated, our component will reflect it
+  const isLoading = useSelector((state: IAppState) => state.dogState.loading);
 
+  //a function to dispatch multiple actions
   const getDog = () => {
     dispatch(loadDogAction(true));
     dispatch(RandomDogAction(dogName));
   }
+
   return (
     <Card className={classes.root}>
-      <CardHeader title={header}></CardHeader>
+      <CardHeader title={<Typography variant="h5" component="h2">Find Doggo</Typography>}></CardHeader>
       <CardContent className={classes.content}>
-        <TextField onChange={(e) => setDogName(e.target.value)} className={classes.input} label="Type a dog breed..." variant="outlined"></TextField>
+        <TextField 
+        onChange={(e) => setDogName(e.target.value)} 
+        className={classes.input} 
+        label="Type a dog breed..." 
+        variant="outlined"></TextField>
         <Button onClick={() => getDog()} className={classes.button} variant="contained" size="large" color="primary"> 
-          get {dogName} doggo
+          {isLoading? <CircularProgress color="secondary"></CircularProgress> : <Typography>get {dogName} doggo</Typography>}
         </Button>
       </CardContent>
     </Card>

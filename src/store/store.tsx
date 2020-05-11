@@ -10,7 +10,7 @@ Redux Thunk middleware allows you to write action creators that return a functio
 */
 import thunk from 'redux-thunk';
 // Import reducers and state type
-import { IDogState, basicReducer } from '../reducers/basicReducer';
+import { IDogState, dogReducer } from '../reducers/dogReducer';
 
 // Create an interface for the application state
 export interface IAppState {
@@ -19,7 +19,7 @@ export interface IAppState {
 
 // Create the root reducer
 const rootReducer = combineReducers<IAppState>({
-  dogState: basicReducer
+  dogState: dogReducer
 });
 
 // Create a configure store function of type `IAppState`
